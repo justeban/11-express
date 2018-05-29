@@ -1,7 +1,14 @@
 'use strict';
 
-let express = require('express');
-let app = express();
+// const express = require('express');
+import express from 'express';
+const app = express();
+
+app.use(express.json());
+app.use(express.urlencoded({extended:true}));
+
+import router from './api/api.js';
+app.use(router);
 
 let isRunning = false;
 
