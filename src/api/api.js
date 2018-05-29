@@ -39,7 +39,7 @@ let sendJSON204 = (res, data) => {
 
 let serverError = (res, err) => {
   let error = { error: err };
-  res.statusCode = 500;
+  res.statusCode = 404;
   res.statusMessage = 'Server Error';
   res.setHeader('Content-Type', 'application/json');
   res.write(JSON.stringify(error));
@@ -56,15 +56,15 @@ router.get('/api/v1/:model/:id', (req, res) => {
   let id = req.params.id;
   req.model.fetchOne(id)
     .then(data => sendJSON(res, data))
-    .catch(err => serverError(res, err))
+    .catch(err => serverError(res, err));
 });
 
 router.post('/api/v1/:model', (req, res) => {
   let record = new req.model(req.body);
   record.save()
     .then(data => sendJSON(res, data))
-    .catch(err => serverError(res, err))
-})
+    .catch(err => serverError(res, err));
+});
 
 router.delete('/api/v1/:model/:id', (req, res) => {
   let id = req.params.id;
