@@ -29,6 +29,14 @@ let sendJSON = (res, data) => {
   res.end();
 };
 
+let sendJSON204 = (res, data) => {
+  res.statusCode = 204;
+  res.statusMessage = 'OK';
+  res.setHeader('Content-Type', 'application/json');
+  res.write(JSON.stringify(data));
+  res.end();
+};
+
 let serverError = (res, err) => {
   let error = { error: err };
   res.statusCode = 500;
@@ -44,10 +52,24 @@ router.get('/api/v1/:model', (req, res) => {
     .catch(err => serverError(res, err));
 });
 
+router.get('/api/v1/:model/:id', (req, res) => {
+  let id = req.params.id;
+  req.model.fetchOne(id)
+    .then(data => sendJSON(res, data))
+    .catch(err => serverError(res, err))
+});
+
 router.post('/api/v1/:model', (req, res) => {
   let record = new req.model(req.body);
   record.save()
     .then(data => sendJSON(res, data))
+    .catch(err => serverError(res, err))
+})
+
+router.delete('/api/v1/:model/:id', (req, res) => {
+  let id = req.params.id;
+  req.model.deleteOne(id)
+    .then(data => sendJSON204(res, data))
     .catch(err => serverError(res, err));
 });
 

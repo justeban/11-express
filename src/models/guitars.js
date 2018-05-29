@@ -16,11 +16,11 @@ class Guitar {
     return storage.fetchAll();
   }
 
-  fetchOne(id) {
+  static fetchOne(id) {
     return storage.fetchOne(id);
   }
 
-  deleteOne(id) {
+  static deleteOne(id) {
     return storage.delete(id);
   }
 
